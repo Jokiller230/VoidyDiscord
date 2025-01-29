@@ -1,0 +1,8 @@
+### Jetbrains
+.idea
+
+### Node/Deno/Bun
+node_modules
+
+### Secrets
+.env
