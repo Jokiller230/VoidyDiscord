@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "@discord.js/builders";
 import { ChatInputCommandInteraction } from "discord.js";
 import { Command } from "../../utils/classes/Command.ts";
+import { ChannelType } from "discord-api-types/payloads";
 
 export default new Command({
   data: new SlashCommandBuilder()
@@ -17,6 +18,8 @@ export default new Command({
       flags: ["Ephemeral"]
     });
 
-    interaction.channel?.send({ content: interaction.options.getString("message") });
+    if(interaction.channel && interaction.channel.type === ChannelType.GuildText){
+      interaction.channel?.send({ content: interaction.options.getString("message") ?? "" });
+    }
   }
 })
