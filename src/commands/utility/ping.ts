@@ -1,11 +1,14 @@
-import { SlashCommandBuilder } from "npm:@discordjs/builders@1.10.0";
-import { CommandInteraction } from "npm:discord.js@14.17.3";
+import { SlashCommandBuilder } from "@discord.js/builders";
+import { CommandInteraction } from "discord.js";
+import { Command } from "../../utils/classes/Command.ts";
+import { VoidyClient } from "../../utils/classes/VoidyClient.ts";
 
-export default {
+export default new Command({
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("Responds with pong!"),
-  async execute(interaction: CommandInteraction): Promise<void> {
-    await interaction.reply({ content: "Pong 🏓" });
+
+  async execute(interaction: CommandInteraction, client: VoidyClient): Promise<void> {
+    await interaction.reply({ content: `Pong 🏓 (${client.ws.ping}ms)` });
   }
-}
+})
