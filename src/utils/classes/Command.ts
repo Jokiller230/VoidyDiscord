@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from "discord.js/builders";
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { VoidyClient } from "./VoidyClient.ts";
 
 export class Command {
   constructor(
     options: {
       data: SlashCommandBuilder,
-      execute: (interaction: CommandInteraction, client: VoidyClient) => void
+      execute: (interaction: ChatInputCommandInteraction, client: VoidyClient) => void
     }
   ) {
     this.data = options.data;
@@ -14,5 +14,5 @@ export class Command {
   }
 
   public data: SlashCommandBuilder;
-  public execute: (interaction: CommandInteraction, client: VoidyClient) => void;
+  public execute: (interaction: ChatInputCommandInteraction, client: VoidyClient) => void;
 }
