@@ -4,6 +4,9 @@
     "jsr:@std/assert@1": "1.0.11",
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "npm:@discordjs/builders@1.10.0": "1.10.0",
+    "npm:@discordjs/rest@2.4.2": "2.4.2",
+    "npm:discord-api-types@*": "0.37.118",
+    "npm:discord-api-types@0.37.118": "0.37.118",
     "npm:discord.js@14.17.3": "14.17.3",
     "npm:discord.js@^14.17.3": "14.17.3"
   },
@@ -168,6 +171,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
+      "npm:@discordjs/builders@1.10.0",
+      "npm:discord-api-types@0.37.118",
       "npm:discord.js@^14.17.3"
     ]
   }
