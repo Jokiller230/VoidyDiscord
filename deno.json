@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run --watch --allow-env --allow-read --allow-net --env-file src/index.ts"
+    "dev": "deno run --watch --allow-env --allow-read --allow-net --allow-sys --env-file src/index.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
@@ -8,6 +8,7 @@
     "discord-api-types/gateway": "npm:discord-api-types@0.37.118/gateway",
     "discord-api-types/rest": "npm:discord-api-types@0.37.118/rest",
     "@discord.js/builders": "npm:@discordjs/builders@1.10.0",
-    "discord-api-types/payloads": "npm:discord-api-types@0.37.118/payloads"
+    "discord-api-types/payloads": "npm:discord-api-types@0.37.118/payloads",
+    "mongoose": "npm:mongoose@^8.10.1"
   }
 }
