@@ -8,8 +8,9 @@ import * as mongoose from "mongoose";
 const client = new VoidyClient({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
 
 // Attempt database connection
-mongoose.connect("mongodb://127.0.0.1:27017/voidy").then(() => {
+await mongoose.connect("mongodb://127.0.0.1:27017/voidy").then(() => {
     console.log("[Voidy] Successfully connected to database at 127.0.0.1:27017");
+    console.log("");
 }).catch((err) => {
     console.error("[Voidy] Database error: ", err);
     Deno.exit(1);
