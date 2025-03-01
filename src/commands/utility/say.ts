@@ -10,7 +10,10 @@ export default new Command({
     .addStringOption((option) => option
       .setName("message")
       .setDescription("The message you'd like to send.")
-      .setRequired(true)),
+      .setRequired(true))
+    .addNumberOption((option) => option
+      .setName("amount")
+      .setDescription("The amount of times to send the specified message.")),
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     await interaction.reply({
@@ -19,7 +22,15 @@ export default new Command({
     });
 
     if(interaction.channel && interaction.channel.type === ChannelType.GuildText){
-      interaction.channel?.send({ content: interaction.options.getString("message") ?? "" });
+      const amount = interaction.options.getNumber("amount");
+
+      if (amount) {
+        for (let i = 0; i < amount; i++) {
+          interaction.channel?.send({ content: interaction.options.getString("message") ?? "" });
+        }
+      } else {
+        interaction.channel?.send({ content: interaction.options.getString("message") ?? "" });
+      }
     }
   }
 })
