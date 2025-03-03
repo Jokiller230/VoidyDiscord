@@ -1,7 +1,7 @@
 import { GatewayIntentBits } from "discord.js";
 import { VoidyClient } from "./utils/classes/VoidyClient.ts";
-import { handleCommands } from "./handlers/handleCommand.ts";
-import { handleEvents } from "./handlers/handleEvents.ts";
+import { CommandHandler } from "./handlers/CommandHandler.ts";
+import { EventHandler } from "./handlers/EventHandler.ts";
 import * as mongoose from "mongoose";
 
 // Create bot client instance
@@ -16,9 +16,9 @@ await mongoose.connect("mongodb://127.0.0.1:27017/voidy").then(() => {
     Deno.exit(1);
 });
 
-// Handle commands and events
-await handleCommands(client, "src/commands");
-await handleEvents(client, "src/events");
+// Handle standalone commands and events
+await CommandHandler.loadCommands(client, ["src/commands"]);
+await EventHandler.loadEvents(client, ["src/events"]);
 
 // Login using the specified token
 client.login(Deno.env.get("BOT_TOKEN")).then(() => console.log("[Voidy] Successfully logged in!"));
