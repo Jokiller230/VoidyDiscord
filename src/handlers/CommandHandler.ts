@@ -5,9 +5,13 @@ import { REST, Routes } from "discord.js";
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord-api-types/rest";
 
 export class CommandHandler {
-  protected static commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
+  protected static commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
+    [];
 
-  public static async loadCommands(client: VoidyClient, paths: string[] = ["src/commands"]) {
+  public static async loadCommands(
+    client: VoidyClient,
+    paths: string[] = ["src/commands"],
+  ) {
     for (const path of paths) {
       await this.loadFiles(client, path);
     }
@@ -27,7 +31,9 @@ export class CommandHandler {
 
     // Grab the bot client id from the BOT_CLIENT_ID environment variable
     const clientId = Deno.env.get("BOT_CLIENT_ID");
-    if (!clientId) throw new Error("BOT_CLIENT_ID environment variable is missing");
+    if (!clientId) {
+      throw new Error("BOT_CLIENT_ID environment variable is missing");
+    }
 
     // Send a put request to the application commands endpoint, the request body contains an array of all commands
     await rest.put(
@@ -35,8 +41,9 @@ export class CommandHandler {
       { body: this.commands },
     );
 
-    console.log(`[Voidy] Successfully deployed ${this.commands.length} commands.`);
-    console.log();
+    console.log(
+      `[Voidy] Successfully deployed ${this.commands.length} commands.\n`,
+    );
   }
 
   protected static async loadFiles(client: VoidyClient, path: string) {
@@ -47,7 +54,8 @@ export class CommandHandler {
       for await (const walkEntry of walk(path)) {
         if (!walkEntry.isFile) continue;
 
-        const command: Command = (await import(`file://${Deno.cwd()}/${walkEntry.path}`)).default;
+        const command: Command =
+          (await import(`file://${Deno.cwd()}/${walkEntry.path}`)).default;
 
         if ("data" in command && "execute" in command) {
           client.commands.set(command.data.name, command);
@@ -55,7 +63,9 @@ export class CommandHandler {
 
           console.log(`[Voidy] Loaded command: ${command.data.name}`);
         } else {
-          console.log(`[Voidy] Command ${walkEntry.path} is missing the "data" or "execute" property.`);
+          console.log(
+            `[Voidy] Command ${walkEntry.path} is missing the "data" or "execute" property.`,
+          );
         }
       }
     } catch {
