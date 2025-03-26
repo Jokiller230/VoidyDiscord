@@ -11,5 +11,5 @@
     "discord-api-types/payloads": "npm:discord-api-types@0.37.118/payloads",
     "mongoose": "npm:mongoose@^8.10.1"
   },
-  "nodeModulesDir": "auto"
+  "nodeModulesDir": true
 }
