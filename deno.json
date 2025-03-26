@@ -10,5 +10,6 @@
     "@discord.js/builders": "npm:@discordjs/builders@1.10.0",
     "discord-api-types/payloads": "npm:discord-api-types@0.37.118/payloads",
     "mongoose": "npm:mongoose@^8.10.1"
-  }
+  },
+  "nodeModulesDir": "auto"
 }
