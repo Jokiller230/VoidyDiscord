@@ -25,5 +25,6 @@ jobs:
       - name: Run linter
         run: deno lint
 
-      - name: Run tests
-        run: deno test -A
+      # Disable for now, since we're not actually using any tests
+      # - name: Run tests
+      #   run: deno test -A
