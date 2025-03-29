@@ -57,19 +57,29 @@ export class CommandHandler {
         const command: Command =
           (await import(`file://${Deno.cwd()}/${walkEntry.path}`)).default;
 
-        if ("data" in command && "execute" in command) {
-          client.commands.set(command.data.name, command);
-          this.commands.push(command.data.toJSON());
-
-          console.log(`[Voidy] Loaded command: ${command.data.name}`);
-        } else {
-          console.log(
-            `[Voidy] Command ${walkEntry.path} is missing the "data" or "execute" property.`,
-          );
-        }
+        this.handleCommand(client, command, walkEntry.path);
       }
     } catch {
-      console.log(`[Voidy] Directory ${path} doesn't exist`);
+      console.log(
+        `[Voidy] Directory ${path} doesn't exist, or another error occurred`,
+      );
     }
+  }
+
+  public static handleCommand(
+    client: VoidyClient,
+    command: Command,
+    commandPath: string,
+  ) {
+    if (!command.data || !command.execute) {
+      return console.log(
+        `[Voidy] Command ${commandPath} is missing the "id", "data" or "execute" property.`,
+      );
+    }
+
+    client.commands.set(command.data.name, command);
+    this.commands.push(command.data.toJSON());
+
+    console.log(`[Voidy] Loaded command: ${command.data.name}`);
   }
 }

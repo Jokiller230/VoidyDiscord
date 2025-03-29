@@ -5,14 +5,24 @@ import { VoidyClient } from "./VoidyClient.ts";
 export class Command {
   constructor(
     options: {
-      data: SlashCommandBuilder,
-      execute: (interaction: ChatInputCommandInteraction, client: VoidyClient) => void
-    }
+      data: SlashCommandBuilder;
+      execute: (
+        options: {
+          interaction: ChatInputCommandInteraction;
+          client: VoidyClient;
+        },
+      ) => void;
+    },
   ) {
     this.data = options.data;
     this.execute = options.execute;
   }
 
   public data: SlashCommandBuilder;
-  public execute: (interaction: ChatInputCommandInteraction, client: VoidyClient) => void;
+  public execute: (
+    options: {
+      interaction: ChatInputCommandInteraction;
+      client: VoidyClient;
+    },
+  ) => void;
 }
