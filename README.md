@@ -9,7 +9,7 @@
 To deploy this project, in development mode, run the following command in your terminal of choice.
 
 ```sh
-deno task dev
+bun run dev
 ```
 
 ## 🎨 Credits

@@ -1,5 +1,0 @@
-{
-    "name": "chatbot",
-    "description": "Send random messages. Allows configuring profiles, messages, events and special filters.",
-    "version": "0.1.0"
-}
