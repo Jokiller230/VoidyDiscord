@@ -13,6 +13,15 @@ export interface Command {
   ) => Promise<void>;
 }
 
+export interface Event {
+  name: string;
+  once?: boolean;
+  execute: (
+    data: object,
+    context: FeatureContext,
+  ) => Promise<void> | void;
+}
+
 export type ButtonHandler = (
   interaction: ButtonInteraction,
   context: FeatureContext,
@@ -24,6 +33,7 @@ export interface Feature {
   description?: string;
 
   commands?: Command[];
+  events?: Event[];
   buttonHandlers?: Map<string, ButtonHandler>;
 
   // Optional lifecycle hooks

@@ -43,6 +43,26 @@ export class FeatureRegistry {
         }
       }
     });
+
+    // Global event handler
+    for (const feature of this.features.values()) {
+      for (const event of feature.events ?? []) {
+        const context = {
+          client: this.client,
+          createCustomId: (id: string) => `${feature.id}:${id}`,
+        };
+
+        if (event.once) {
+          this.client.once(event.name, async (data) => {
+            await event.execute(data, context);
+          });
+        } else {
+          this.client.on(event.name, async (data) => {
+            await event.execute(data, context);
+          });
+        }
+      }
+    }
   }
 
   async loadFeaturesFromDirectory(directory: string) {
@@ -68,6 +88,19 @@ export class FeatureRegistry {
         console.log(`🔹 Loaded feature: ${feature.name}`);
       }
     }
+
+    // Log some statistics
+    const featureCount = this.features.size;
+    const eventsCount = Array.from(this.features.values())
+      .flatMap((f) => f.events ?? [])
+      .length;
+    const commandsCount = Array.from(this.features.values())
+      .flatMap((f) => f.commands ?? [])
+      .length;
+
+    console.log(
+      `✅ Loaded ${featureCount} features, with ${eventsCount} events and ${commandsCount} commands.`,
+    );
   }
 
   async deployCommands() {

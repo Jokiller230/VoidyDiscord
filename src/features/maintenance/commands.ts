@@ -44,7 +44,8 @@ export const reloadCommand: Command = {
   },
 };
 
-const OWNER_ID = "423520077246103563";
+const OWNER_IDS =
+  Deno.env.get("BOT_ADMINS")?.split(",").map((id) => id.trim()) ?? [];
 
 export const evalCommand: Command = {
   data: new SlashCommandBuilder()
@@ -66,10 +67,10 @@ export const evalCommand: Command = {
     if (!interaction.isChatInputCommand()) return;
     const userId = interaction.user.id;
 
-    if (userId !== OWNER_ID) {
-      interaction.reply({
+    if (!OWNER_IDS.includes(userId)) {
+      await interaction.reply({
         content: "❌ You are not authorized to use this.",
-        ephemeral: true,
+        flags: [MessageFlags.Ephemeral],
       });
 
       return;

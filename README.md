@@ -1,5 +1,5 @@
 <br>
-<h1 align="center">️✨ Voidy ✨<br></h1>
+<h1 align="center">️✨ Voidy 2.0 ✨<br></h1>
 <div align="center"><img src=".github/assets/cyn-hi-chat-cyn-murder-drones.gif" width=200></div>
 <br>
 <div align="center">My powerful discord bot :3</div>
@@ -9,7 +9,7 @@
 To deploy this project, in development mode, run the following command in your terminal of choice.
 
 ```sh
-bun run dev
+deno task dev
 ```
 
 ## 🎨 Credits

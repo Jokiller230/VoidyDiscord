@@ -17,6 +17,7 @@ export class VoidyClient extends Client {
 
     this.once("ready", async () => {
       console.log(`✅ Logged in as ${this.user?.tag}`);
+
       await this.registry.deployCommands();
       await this.registry.notifyReady();
     });
