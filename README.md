@@ -13,7 +13,7 @@ deno task dev
 ## 📝 Goals
 - Implement a robust combined event and command handling system, with proper namespacing, titled "feature manager"
 - Built-in statistics system, which records monthly channel/user activity, command executions per guild/user, and more (all recorded data is viewable by the user or guild admins)
-- Built-in friend management system, which allows sharing secret messages and giving other users access to your statistics data
+- Built-in relationship management system, which allows sharing secret messages and giving other users access to your statistics data
 - Integration of Snowfall API, with configurable instance URL and token, for synchronizing statistics, in a last.fm like fashion, but more open and cool
 
 ## 🎨 Credits
