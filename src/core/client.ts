@@ -1,13 +1,11 @@
-import { Client, GatewayIntentBits } from "discord.js";
+import { Client, ClientOptions } from "discord.js";
 import { FeatureRegistry } from "./registry.ts";
 
 export class VoidyClient extends Client {
   public registry: FeatureRegistry;
 
-  constructor() {
-    super({
-      intents: [GatewayIntentBits.Guilds],
-    });
+  constructor(options: ClientOptions) {
+    super(options);
 
     this.registry = new FeatureRegistry(this);
   }

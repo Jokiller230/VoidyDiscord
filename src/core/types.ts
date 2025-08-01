@@ -1,14 +1,15 @@
 import {
   ButtonInteraction,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   SlashCommandBuilder,
+  SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
 import { VoidyClient } from "./client.ts";
 
 export interface Command {
-  data: SlashCommandBuilder;
+  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
   execute: (
-    interaction: CommandInteraction,
+    interaction: ChatInputCommandInteraction,
     context: FeatureContext,
   ) => Promise<void>;
 }

@@ -1,10 +1,10 @@
 {
-  "tasks": {
-    "dev": "deno run --watch --env-file --allow-env --allow-read --allow-net --unstable-cron src/main.ts"
-  },
-  "imports": {
-    "@std/fs": "jsr:@std/fs",
-    "@std/path": "jsr:@std/path",
-    "discord.js": "npm:discord.js"
-  }
+	"tasks": {
+		"dev": "deno run --watch --env-file --allow-env --allow-read --allow-net --unstable-cron src/main.ts"
+	},
+	"imports": {
+		"@std/fs": "jsr:@std/fs",
+		"@std/path": "jsr:@std/path",
+		"discord.js": "npm:discord.js"
+	}
 }

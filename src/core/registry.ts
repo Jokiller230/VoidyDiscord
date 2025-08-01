@@ -31,15 +31,15 @@ export class FeatureRegistry {
       if (interaction.isButton()) {
         const [featureId, buttonId] = interaction.customId.split(":");
         const feature = this.features.get(featureId);
-        const handler = feature?.buttonHandlers?.get(buttonId);
+        const buttonHandler = feature?.buttonHandlers?.get(buttonId);
 
-        if (feature && handler) {
+        if (feature && buttonHandler) {
           const context = {
             client: this.client,
             createCustomId: (id: string) => `${feature.id}:${id}`,
           };
 
-          return await handler(interaction, context);
+          return await buttonHandler(interaction, context);
         }
       }
     });

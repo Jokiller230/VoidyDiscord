@@ -1,12 +1,12 @@
 import type { Feature } from "../../core/types.ts";
-import { pingCommand } from "./commands.ts";
+import { pingCommand, uploadCommand } from "./commands.ts";
 import { refreshButton } from "./interactions.ts";
 
 const UtilityFeature: Feature = {
   id: "utility",
   name: "Utility Commands",
 
-  commands: [pingCommand],
+  commands: [pingCommand, uploadCommand],
   buttonHandlers: new Map([
     ["refresh", refreshButton],
   ]),
