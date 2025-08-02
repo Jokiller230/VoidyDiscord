@@ -12,6 +12,8 @@ The constructor of a loader always takes one parameter, a string/path pointer to
 
 Each loader additionally implements an asynchronous `collect` method for initial data collection.
 
+Additionally, each loader implements their own asynchronous `validate` method, which is invoked within `collect`, to validate the contents of a file, before adding it to the Loader store.
+
 Finally, loaders provide various means of exporting data in supported formats, through methods like `getJSON`, `getCSV` and more...
 
 ### Event loader
