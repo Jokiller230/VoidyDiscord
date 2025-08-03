@@ -1,5 +1,5 @@
 import { Events } from "discord.js";
-import type { IEvent } from "../loaders/EventLoader";
+import type { Event } from "../loaders/EventLoader";
 
 export default {
 	name: Events.ClientReady,
@@ -7,4 +7,4 @@ export default {
 	execute: () => {
 
 	}
-} as IEvent;
+} as Event;

@@ -20,7 +20,7 @@ export class Loader<T extends object> implements ILoader<T> {
 	}
 
 	/**
-	* Recursively collects data from a directory based on the directory specificed in dataSource property.
+	* Recursively collects data from a directory based on the path specificed in dataSource property.
 	*/
 	public async collect() {
 		const glob = new Glob(`**.ts`);
