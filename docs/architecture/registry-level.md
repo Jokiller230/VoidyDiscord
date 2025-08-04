@@ -9,7 +9,7 @@ The following properties are required:
 
 The following methods are required:
 - collect (uses the ModuleLoader to collect the raw JSON output of all registry modules) [registry::preCollect, registry::postCollect]
-- load (uses various loaders to prepare Module contents, based on the Module's exports property, which exports an array of ModuleExportItem's.) [registry::preLoad, registry::postLoad]
+- prepare (uses various loaders to prepare Module contents, based on the Module's exports property, which exports an array of ModuleExportItem's.) [registry::prePrepare, registry::postPrepare]
 - activate (activates the registry and all contained features) [registry::preActivate, registry::postActivate]
 - unload (deactivates all modules stored in the registry and the registry itself) [registry::preUnload, registry::postUnload]
 

@@ -1,12 +1,12 @@
 import { Glob } from "bun";
 
 export interface ILoader<T> {
-	dataSource: string,
-	store: T[];
+	dataSource: string
+	store: T[]
 
-	collect: () => Promise<ThisType<this>>,
-	validate: (data: Partial<T>) => Promise<T | null>,
-	getJSON: () => T[],
+	collect: () => Promise<ThisType<this>>
+	validate: (data: Partial<T>) => Promise<T | null>
+	getJSON: () => T[]
 }
 
 export class Loader<T extends object> implements ILoader<T> {
