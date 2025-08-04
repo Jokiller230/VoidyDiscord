@@ -7,7 +7,9 @@ export class VoidyClient extends Client {
 	public constructor(options: ClientOptions) {
 		super(options);
 
-		this.registries = [new Registry()];
+		this.registries = [
+			new Registry(`${process.cwd()}/src/modules`),
+		];
 	}
 
 	public start(token: string) {

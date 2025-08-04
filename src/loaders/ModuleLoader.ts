@@ -1,8 +1,10 @@
+import type { Handler } from "../core/Handler"
 import { Loader } from "../core/Loader"
 
 export interface ModuleExportsItem<T extends object> {
 	source: string
-	loader: Loader<T>
+	loader: typeof Loader<T>
+	handler: Handler<T>
 }
 
 export interface Module {

@@ -13,5 +13,10 @@ if (!Bun.env.BOT_TOKEN) throw new Error("[Voidy] Missing bot token");
 client.start(Bun.env.BOT_TOKEN);
 
 // @Todo: Remove after event and command loader implementation is complete
-const eventLoader = await new EventLoader(join(__dirname, "events")).collect();
-console.log(eventLoader);
+// const eventLoader = await new EventLoader(join(__dirname, "events")).collect();
+// console.log(eventLoader);
+
+// @Todo: Remove after Registries implementation is complete
+for (const registry of client.registries) {
+	await registry.collect();
+}

@@ -23,11 +23,13 @@ The event loader walks a directory and stores data from any file exporting an ob
 The command loader walks a directory and stores data from any file exporting an object that follows the Command type structure.
 
 ## Handlers
-Handlers are static classes, which receive exported data from Loaders, though not directly, as Loader data is usually fetched by a Registry, and the Registry invokes a Handler to get data into our queue system, more on that later.
+Handlers are static classes, which are invoked, usually on discord events or interactions.
 
-Each handler has an `invoke` method, which takes JSON data, though it must always use the common exported JSON structure provided by Loaders.
+Each handler has an `invoke` method, which is the one I mentioned calling above.
 
-Any data filtering or mapping is then run in the background by the invoked Handler, which ultimately pushes data to the queue, and triggers a "handler::postInvoke" event afterward.
+The handler then queries the core registry and all other registries afterward, to find a fitting execution target.
+
+It's important to note that only repositories marked as active are taken into account.
 
 @Todo: document Handler lifecycle events
 

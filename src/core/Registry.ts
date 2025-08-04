@@ -1,6 +1,7 @@
-import type { Module } from "../loaders/ModuleLoader"
+import { ModuleLoader, type Module } from "../loaders/ModuleLoader"
 
 export interface IRegistry {
+	dataSource: string
 	store: Module[]
 
 	collect: () => Promise<void>
@@ -10,9 +11,18 @@ export interface IRegistry {
 }
 
 export class Registry implements IRegistry {
+	public dataSource: string;
 	public store: Module[] = [];
 
-	public async collect() { }
+	public constructor(dataSource: string) {
+		this.dataSource = dataSource;
+	}
+
+	// @Todo: finish this implementation
+	public async collect() {
+		const moduleLoader = await (new ModuleLoader(this.dataSource)).collect();
+		console.log(moduleLoader.getJSON()[0]?.exports);
+	}
 
 	public async prepare() { }
 
