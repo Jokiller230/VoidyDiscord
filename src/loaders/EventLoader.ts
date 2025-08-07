@@ -1,10 +1,11 @@
-import { Events } from "discord.js";
+import { type ClientEvents } from "discord.js";
 import { Loader } from "../core/Loader";
+import type { VoidyClient } from "../core/VoidyClient";
 
 export interface Event {
-	name: Events,
+	name: keyof ClientEvents,
 	once?: boolean,
-	execute: () => void,
+	execute: (client: VoidyClient, ...args: unknown[]) => void,
 }
 
 export class EventLoader extends Loader<Event> {

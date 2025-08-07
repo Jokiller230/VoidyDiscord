@@ -1,16 +1,20 @@
+import { CommandLoader } from "../../loaders/CommandLoader";
 import { EventLoader } from "../../loaders/EventLoader";
 import type { Module } from "../../loaders/ModuleLoader";
 
 export default {
-	name: "booru-fetcher",
-	description: "Fetch images and other content from tag-based imageboards, like danbooru.",
+	name: "core",
+	description: "The core feature set of the bot, required for command handling to work.",
 	author: "jokiller230",
 
 	exports: [
 		{
 			source: `${import.meta.dir}/events`,
 			loader: EventLoader,
-			handler: {}
+		},
+		{
+			source: `${import.meta.dir}/commands`,
+			loader: CommandLoader,
 		}
 	]
 } as Module;

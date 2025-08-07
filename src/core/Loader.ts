@@ -1,6 +1,6 @@
 import { Glob } from "bun";
 
-export interface ILoader<T> {
+interface ILoader<T> {
 	dataSource: string
 	store: T[]
 

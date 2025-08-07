@@ -1,8 +1,13 @@
+import { CommandLoader, type Command } from "../loaders/CommandLoader"
+import { EventLoader, type Event } from "../loaders/EventLoader"
 import { ModuleLoader, type Module } from "../loaders/ModuleLoader"
 
 export interface IRegistry {
 	dataSource: string
-	store: Module[]
+	modules: Module[]
+	commands: Command[]
+	events: Event[]
+	active: boolean
 
 	collect: () => Promise<void>
 	prepare: () => Promise<void>
@@ -12,21 +17,42 @@ export interface IRegistry {
 
 export class Registry implements IRegistry {
 	public dataSource: string;
-	public store: Module[] = [];
+	public modules: Module[] = [];
+	public commands: Command[] = [];
+	public events: Event[] = [];
+	public active = false;
 
 	public constructor(dataSource: string) {
 		this.dataSource = dataSource;
 	}
 
-	// @Todo: finish this implementation
 	public async collect() {
-		const moduleLoader = await (new ModuleLoader(this.dataSource)).collect();
-		console.log(moduleLoader.getJSON()[0]?.exports);
+		// Collect modules and bundle their JSON contents into an array.
+		const moduleLoader = new ModuleLoader(this.dataSource);
+		const modules = (await moduleLoader.collect()).getJSON();
+
+		// Merge all modules into the store.
+		this.modules = this.modules.concat(modules);
 	}
 
-	public async prepare() { }
+	public async prepare() {
+		for (const module of this.modules) {
+			for (const item of module.exports) {
+				const loader = new item.loader(item.source);
+				await loader.collect();
 
-	public async activate() { }
+				if (loader instanceof CommandLoader) {
+					this.commands.push(...loader.getJSON());
+				} else if (loader instanceof EventLoader) {
+					this.events.push(...loader.getJSON());
+				}
+			}
+		}
+	}
+
+	public async activate() {
+		this.active = true;
+	}
 
 	public async unload() { }
 }
