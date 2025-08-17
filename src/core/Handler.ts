@@ -1,7 +1,16 @@
+import type { ChatInputCommandInteraction } from "discord.js";
+import type { VoidyClient } from "./VoidyClient";
+
 interface IHandler<T extends object> {
-	invoke: (data: T) => void
+	invoke: (data: ChatInputCommandInteraction) => void
 }
 
 export abstract class Handler<T extends object> implements IHandler<T> {
-	public abstract invoke(data: T): void
+	protected client: VoidyClient;
+
+	public constructor(client: VoidyClient) {
+		this.client = client;
+	}
+
+	public abstract invoke(data: ChatInputCommandInteraction): void
 }

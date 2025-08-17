@@ -21,32 +21,50 @@ export class VoidyClient extends Client {
 	}
 
 	public async start(token: string) {
+		// 1. Prepare commands and events, without registering them
+		const { commands, events } = await this.initialize();
+
+		// 2. Register event listeners
+		await this.registerEventHandlers(events);
+
+		// 3. Log in
 		await this.login(token);
-		await this.initialize();
+
+		// 4. Register/Publish commands
+		await this.registerCommands(commands);
 	}
 
 	private async initialize() {
 		for (const registry of this.registries) {
+			// 1. Collecting required registry data
+			console.info(`[Voidy] Collecting registry data: ${registry.dataSource}`);
 			await registry.collect();
+
+			// 2. Preparing collected registry data for activation
+			console.info(`[Voidy] Preparing registry data: ${registry.dataSource}`);
 			await registry.prepare();
+
+			// 3. Activating registry
+			console.info(`[Voidy] Activating registry: ${registry.dataSource}`);
 			await registry.activate();
 		}
 
 		const activeRegistries = this.registries
 			.filter(registry => registry.active);
 
-		const allEvents = activeRegistries
+		const events = activeRegistries
 			.flatMap(registry => registry.events);
 
-		const allCommands = activeRegistries
+		const commands = activeRegistries
 			.flatMap(registry => registry.commands)
 			.flatMap(commands => commands.data.toJSON())
 
-		await this.registerEventHandlers(allEvents);
-		await this.registerCommands(allCommands);
+		return { commands, events };
 	}
 
 	private async registerEventHandlers(events: Event[]) {
+		console.log(`[Voidy] Registering ${events.length} event listeners: ${events.map(event => event.name).join(", ")}`);
+
 		for (const event of events) {
 			const execute = (...args: unknown[]) => event.execute(this, ...args);
 
@@ -57,6 +75,8 @@ export class VoidyClient extends Client {
 
 	// @Todo: fix this type mess, if possible
 	private async registerCommands(commands: (RESTPostAPIChatInputApplicationCommandsJSONBody | APIApplicationCommandSubcommandOption | APIApplicationCommandSubcommandGroupOption)[]) {
+		console.info(`[Voidy] Registering ${commands.length} commands: ${commands.map(command => command.name).join(", ")}`);
+
 		await this.application?.commands.set(commands as ApplicationCommandDataResolvable[]);
 	}
 }

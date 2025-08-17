@@ -1,6 +1,7 @@
 import { CommandLoader, type Command } from "../loaders/CommandLoader"
 import { EventLoader, type Event } from "../loaders/EventLoader"
 import { ModuleLoader, type Module } from "../loaders/ModuleLoader"
+import { Lifecycle, LifecycleEvents } from "./Lifecycle"
 
 export interface IRegistry {
 	dataSource: string
@@ -12,7 +13,7 @@ export interface IRegistry {
 	collect: () => Promise<void>
 	prepare: () => Promise<void>
 	activate: () => Promise<void>
-	unload: () => Promise<void>
+	deactivate: () => Promise<void>
 }
 
 export class Registry implements IRegistry {
@@ -27,12 +28,16 @@ export class Registry implements IRegistry {
 	}
 
 	public async collect() {
+		Lifecycle.notify(LifecycleEvents.RegistryPreCollect);
+
 		// Collect modules and bundle their JSON contents into an array.
 		const moduleLoader = new ModuleLoader(this.dataSource);
 		const modules = (await moduleLoader.collect()).getJSON();
 
 		// Merge all modules into the store.
 		this.modules = this.modules.concat(modules);
+
+		Lifecycle.notify(LifecycleEvents.RegistryPostCollect);
 	}
 
 	public async prepare() {
@@ -54,5 +59,7 @@ export class Registry implements IRegistry {
 		this.active = true;
 	}
 
-	public async unload() { }
+	public async deactivate() {
+		this.active = false;
+	}
 }
