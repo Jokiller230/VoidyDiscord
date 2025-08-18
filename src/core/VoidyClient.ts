@@ -4,13 +4,16 @@ import {
 	type APIApplicationCommandSubcommandOption,
 	type ApplicationCommandDataResolvable,
 	type ClientOptions,
+	type Interaction,
 	Client,
 } from "discord.js";
 import { Registry } from "./Registry";
 import type { Event } from "../loaders/EventLoader";
+import type { Command } from "../loaders/CommandLoader";
 
 export class VoidyClient extends Client {
 	public registries: Registry[];
+	public cache: Command[] = [];
 
 	public constructor(options: ClientOptions) {
 		super(options);
@@ -22,7 +25,14 @@ export class VoidyClient extends Client {
 
 	public async start(token: string) {
 		// 1. Prepare commands and events, without registering them
-		const { commands, events } = await this.initialize();
+		const {
+			commands,
+			commandsJSON,
+			events
+		} = await this.collectBundledRegistryData();
+
+		// 1.1 Cache collected commands
+		this.cache = [...commands];
 
 		// 2. Register event listeners
 		await this.registerEventHandlers(events);
@@ -31,10 +41,10 @@ export class VoidyClient extends Client {
 		await this.login(token);
 
 		// 4. Register/Publish commands
-		await this.registerCommands(commands);
+		await this.registerCommands(commandsJSON);
 	}
 
-	private async initialize() {
+	private async collectBundledRegistryData() {
 		for (const registry of this.registries) {
 			// 1. Collecting required registry data
 			console.info(`[Voidy] Collecting registry data: ${registry.dataSource}`);
@@ -49,17 +59,24 @@ export class VoidyClient extends Client {
 			await registry.activate();
 		}
 
+		// Only get active registries
 		const activeRegistries = this.registries
 			.filter(registry => registry.active);
 
+		// Collect events from active registries
 		const events = activeRegistries
 			.flatMap(registry => registry.events);
 
+		// Collect raw commands from active registries
 		const commands = activeRegistries
+			.flatMap(registry => registry.commands)
+
+		// Collect JSON export of commands from active registries
+		const commandsJSON = activeRegistries
 			.flatMap(registry => registry.commands)
 			.flatMap(commands => commands.data.toJSON())
 
-		return { commands, events };
+		return { commands, commandsJSON, events };
 	}
 
 	private async registerEventHandlers(events: Event[]) {
