@@ -10,10 +10,14 @@ import {
 import { Registry } from "./Registry";
 import type { Event } from "../loaders/EventLoader";
 import type { Command } from "../loaders/CommandLoader";
+import type { Button } from "../loaders/ButtonLoader";
 
 export class VoidyClient extends Client {
 	public registries: Registry[];
-	public cache: Command[] = [];
+	public cache: { commands: Command[], buttons: Button[] } = {
+		commands: [],
+		buttons: [],
+	};
 
 	public constructor(options: ClientOptions) {
 		super(options);
@@ -28,11 +32,13 @@ export class VoidyClient extends Client {
 		const {
 			commands,
 			commandsJSON,
+			buttons,
 			events
 		} = await this.collectBundledRegistryData();
 
-		// 1.1 Cache collected commands
-		this.cache = [...commands];
+		// 1.1 Cache collected commands and buttons
+		this.cache.commands = [...commands];
+		this.cache.buttons = [...buttons];
 
 		// 2. Register event listeners
 		await this.registerEventHandlers(events);
@@ -76,7 +82,11 @@ export class VoidyClient extends Client {
 			.flatMap(registry => registry.commands)
 			.flatMap(commands => commands.data.toJSON())
 
-		return { commands, commandsJSON, events };
+		// Collect raw buttons from active registries
+		const buttons = activeRegistries
+			.flatMap(registry => registry.buttons)
+
+		return { commands, commandsJSON, buttons, events };
 	}
 
 	private async registerEventHandlers(events: Event[]) {

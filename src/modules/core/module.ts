@@ -1,3 +1,4 @@
+import { ButtonLoader } from "../../loaders/ButtonLoader";
 import { CommandLoader } from "../../loaders/CommandLoader";
 import { EventLoader } from "../../loaders/EventLoader";
 import type { Module } from "../../loaders/ModuleLoader";
@@ -15,6 +16,10 @@ export default {
 		{
 			source: `${import.meta.dir}/commands`,
 			loader: CommandLoader,
+		},
+		{
+			source: `${import.meta.dir}/buttons`,
+			loader: ButtonLoader,
 		}
 	]
 } as Module;

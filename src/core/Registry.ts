@@ -1,3 +1,4 @@
+import { ButtonLoader, type Button } from "../loaders/ButtonLoader"
 import { CommandLoader, type Command } from "../loaders/CommandLoader"
 import { EventLoader, type Event } from "../loaders/EventLoader"
 import { ModuleLoader, type Module } from "../loaders/ModuleLoader"
@@ -7,6 +8,7 @@ export interface IRegistry {
 	dataSource: string
 	modules: Module[]
 	commands: Command[]
+	buttons: Button[]
 	events: Event[]
 	active: boolean
 
@@ -20,6 +22,7 @@ export class Registry implements IRegistry {
 	public dataSource: string;
 	public modules: Module[] = [];
 	public commands: Command[] = [];
+	public buttons: Button[] = [];
 	public events: Event[] = [];
 	public active = false;
 
@@ -50,6 +53,8 @@ export class Registry implements IRegistry {
 					this.commands.push(...loader.getJSON());
 				} else if (loader instanceof EventLoader) {
 					this.events.push(...loader.getJSON());
+				} else if (loader instanceof ButtonLoader) {
+					this.buttons.push(...loader.getJSON());
 				}
 			}
 		}
