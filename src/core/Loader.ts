@@ -26,22 +26,27 @@ export class Loader<T extends object> implements ILoader<T> {
 		const glob = new Glob(`**/**.ts`);
 		const iterator = glob.scan(this.dataSource);
 
-		for await (const path of iterator) {
-			let moduleDefault: T | null;
+		try {
+			for await (const path of iterator) {
+				let moduleDefault: T | null;
 
-			try {
-				const module = (await import(`${this.dataSource}/${path}`));
-				moduleDefault = module.default;
+				try {
+					const module = (await import(`${this.dataSource}/${path}`));
+					moduleDefault = module.default;
 
-				if (!moduleDefault) continue;
-			} catch {
-				continue;
+					if (!moduleDefault) continue;
+				} catch {
+					continue;
+				}
+
+				const final = await this.validate(moduleDefault);
+				if (!final) continue;
+
+				this.store.push(final);
 			}
-
-			const final = await this.validate(moduleDefault);
-			if (!final) continue;
-
-			this.store.push(final);
+		} catch {
+			console.error(`[Voidy] Specified loader target ${this.dataSource} doesn't exist. Skipping...`);
+			return this;
 		}
 
 		return this;
