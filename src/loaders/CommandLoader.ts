@@ -13,6 +13,7 @@ export interface Command {
 }
 
 export class CommandLoader extends Loader<Command> {
+	public override id = "command";
 	public override async validate(data: Partial<Command>) {
 		if (!data.data || !data.execute) return null;
 		return data as Command;

@@ -9,6 +9,7 @@ export interface Event {
 }
 
 export class EventLoader extends Loader<Event> {
+	public override id = "event";
 	public override async validate(data: Partial<Event>) {
 		if (!data.name || !data.execute) return null;
 		return data as Event;

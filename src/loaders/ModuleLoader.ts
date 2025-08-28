@@ -13,6 +13,7 @@ export interface Module {
 }
 
 export class ModuleLoader extends Loader<Module> {
+	public override id = "module";
 	public override async validate(data: Partial<Module>) {
 		if (
 			!data.name ||

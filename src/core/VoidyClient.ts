@@ -4,89 +4,42 @@ import {
 	type APIApplicationCommandSubcommandOption,
 	type ApplicationCommandDataResolvable,
 	type ClientOptions,
-	type Interaction,
 	Client,
 } from "discord.js";
 import { Registry } from "./Registry";
+import { RegistryManager } from "./RegistryManager";
 import type { Event } from "../loaders/EventLoader";
-import type { Command } from "../loaders/CommandLoader";
-import type { Button } from "../loaders/ButtonLoader";
 
 export class VoidyClient extends Client {
-	public registries: Registry[];
-	public cache: { commands: Command[], buttons: Button[] } = {
-		commands: [],
-		buttons: [],
-	};
+	public registryManager = new RegistryManager();
 
 	public constructor(options: ClientOptions) {
 		super(options);
 
-		this.registries = [
-			new Registry(`${process.cwd()}/src/modules`),
-		];
+		// Add the core registry to our registry manager
+		this.registryManager.addRegistry(
+			new Registry('core', `${process.cwd()}/src/modules`)
+		);
 	}
 
 	public async start(token: string) {
-		// 1. Prepare commands and events, without registering them
-		const {
-			commands,
-			commandsJSON,
-			buttons,
-			events
-		} = await this.collectBundledRegistryData();
+		// 1. Prepare and fetch registry manager cache
+		await this.registryManager.prepareRegistries();
+		const cache = this.registryManager.getCache();
 
-		// 1.1 Cache collected commands and buttons
-		this.cache.commands = [...commands];
-		this.cache.buttons = [...buttons];
-
-		// 2. Register event listeners
-		await this.registerEventHandlers(events);
-
-		// 3. Log in
-		await this.login(token);
-
-		// 4. Register/Publish commands
-		await this.registerCommands(commandsJSON);
-	}
-
-	private async collectBundledRegistryData() {
-		for (const registry of this.registries) {
-			// 1. Collecting required registry data
-			console.info(`[Voidy] Collecting registry data: ${registry.dataSource}`);
-			await registry.collect();
-
-			// 2. Preparing collected registry data for activation
-			console.info(`[Voidy] Preparing registry data: ${registry.dataSource}`);
-			await registry.prepare();
-
-			// 3. Activating registry
-			console.info(`[Voidy] Activating registry: ${registry.dataSource}`);
-			await registry.activate();
+		// 2. Showcase all loaded entities based on cache contents
+		for (const [key, value] of Object.entries(cache)) {
+			console.log(`[Voidy] Loaded ${value.length} ${key[0]?.toUpperCase() + key.substring(1)}`);
 		}
 
-		// Only get active registries
-		const activeRegistries = this.registries
-			.filter(registry => registry.active);
+		// 3. Register event listeners
+		await this.registerEventHandlers(cache.events);
 
-		// Collect events from active registries
-		const events = activeRegistries
-			.flatMap(registry => registry.events);
+		// 4. Log in
+		await this.login(token);
 
-		// Collect raw commands from active registries
-		const commands = activeRegistries
-			.flatMap(registry => registry.commands)
-
-		// Collect JSON export of commands from active registries
-		const commandsJSON = activeRegistries
-			.flatMap(registry => registry.commands)
-			.flatMap(commands => commands.data.toJSON())
-
-		// Collect raw buttons from active registries
-		const buttons = activeRegistries
-			.flatMap(registry => registry.buttons)
-
-		return { commands, commandsJSON, buttons, events };
+		// 5. Register/Publish commands
+		await this.registerCommands(cache.commands.flatMap(command => command.data.toJSON()));
 	}
 
 	private async registerEventHandlers(events: Event[]) {

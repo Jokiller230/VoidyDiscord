@@ -1,8 +1,9 @@
 import { Glob } from "bun";
 
 interface ILoader<T> {
-	dataSource: string
-	store: T[]
+	id: string
+	cache: T[]
+	source: string
 
 	collect: () => Promise<ThisType<this>>
 	validate: (data: Partial<T>) => Promise<T | null>
@@ -10,13 +11,14 @@ interface ILoader<T> {
 }
 
 export class Loader<T extends object> implements ILoader<T> {
-	public dataSource;
-	public store: T[] = [];
+	public id = "loader";
+	public cache: T[] = [];
+	public source;
 
-	public constructor(dataSource: string) {
-		if (!dataSource) throw new Error("Class of type Loader was initialized without the *required* dataSource parameter.");
+	public constructor(source: string) {
+		if (!source) throw new Error("Class of type Loader was initialized without the *required* source parameter.");
 
-		this.dataSource = dataSource;
+		this.source = source;
 	}
 
 	/**
@@ -24,14 +26,14 @@ export class Loader<T extends object> implements ILoader<T> {
 	*/
 	public async collect() {
 		const glob = new Glob(`**/**.ts`);
-		const iterator = glob.scan(this.dataSource);
+		const iterator = glob.scan(this.source);
 
 		try {
 			for await (const path of iterator) {
 				let moduleDefault: T | null;
 
 				try {
-					const module = (await import(`${this.dataSource}/${path}`));
+					const module = (await import(`${this.source}/${path}`));
 					moduleDefault = module.default;
 
 					if (!moduleDefault) continue;
@@ -42,10 +44,10 @@ export class Loader<T extends object> implements ILoader<T> {
 				const final = await this.validate(moduleDefault);
 				if (!final) continue;
 
-				this.store.push(final);
+				this.cache.push(final);
 			}
 		} catch {
-			console.error(`[Voidy] Specified loader target ${this.dataSource} doesn't exist. Skipping...`);
+			console.error(`[Voidy] Specified loader target ${this.source} doesn't exist. Skipping...`);
 			return this;
 		}
 
@@ -53,13 +55,16 @@ export class Loader<T extends object> implements ILoader<T> {
 	}
 
 	/**
- * Validates a singular element during data collection, and returns whatever should be written to the store.
- */
+		* Validates a singular element during data collection, and returns whatever should be written to the cache.
+	*/
 	public async validate(data: Partial<T>): Promise<T | null> {
 		return null;
 	}
 
+	/**
+		* Returns the JSON-ified contents of the loader cache
+	*/
 	public getJSON() {
-		return this.store;
+		return this.cache;
 	}
 };

@@ -10,6 +10,7 @@ export interface Button {
 }
 
 export class ButtonLoader extends Loader<Button> {
+	public override id = "button";
 	public override async validate(data: Partial<Button>) {
 		if (!data.id || !data.execute) return null;
 		return data as Button;

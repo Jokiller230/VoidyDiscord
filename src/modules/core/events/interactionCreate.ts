@@ -1,15 +1,15 @@
-import { Events, MessageFlags, type Interaction } from "discord.js";
 import type { Event } from "../../../loaders/EventLoader";
 import type { VoidyClient } from "../../../core/VoidyClient";
-import { ChatInputCommandHandler } from "../../../handlers/CommandHandler";
 import { ButtonHandler } from "../../../handlers/ButtonHandler";
+import { Events, MessageFlags, type Interaction } from "discord.js";
+import { ChatInputCommandHandler } from "../../../handlers/CommandHandler";
 
 export default {
 	name: Events.InteractionCreate,
 	execute: async (client: VoidyClient, interaction: Interaction) => {
 		if (interaction.isChatInputCommand() && interaction.isCommand()) {
 			// Filter the client command cache to locate the invoked command
-			const payload = client.cache.commands.filter(commands => commands.data.name === interaction.commandName)[0];
+			const payload = client.registryManager.getCache().commands.filter(commands => commands.data.name === interaction.commandName)[0];
 
 			if (!payload) return interaction.reply({
 				content: `Sorry, but the command ${interaction.commandName} could not be located in my command cache >:3`,
@@ -19,7 +19,7 @@ export default {
 			ChatInputCommandHandler.invoke(interaction, payload, client);
 		} else if (interaction.isButton()) {
 			// Filter the client button cache to locate the invoked button
-			const payload = client.cache.buttons.filter(buttons => buttons.id === interaction.customId)[0];
+			const payload = client.registryManager.getCache().buttons.filter(buttons => buttons.id === interaction.customId)[0];
 
 			if (!payload) return interaction.reply({
 				content: `Sorry, but the button ${interaction.customId} could not be located in my button cache >:3`,
