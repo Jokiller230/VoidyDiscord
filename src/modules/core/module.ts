@@ -1,7 +1,12 @@
+import { Lifecycle, LifecycleEvents } from "../../core/Lifecycle";
 import { ButtonLoader } from "../../loaders/ButtonLoader";
 import { CommandLoader } from "../../loaders/CommandLoader";
 import { EventLoader } from "../../loaders/EventLoader";
 import type { Module } from "../../loaders/ModuleLoader";
+
+Lifecycle.subscribe(LifecycleEvents.ClientLoop, () => {
+	console.log("Wait what, wait what...");
+})
 
 export default {
 	name: "core",

@@ -2,6 +2,9 @@ export enum LifecycleEvents {
 	// Registries
 	RegistryPreCollect = "registry::preCollect",
 	RegistryPostCollect = "registry::postCollect",
+
+	// Client
+	ClientLoop = "client::loop",
 }
 
 type LifecycleEventCallback = () => void;
