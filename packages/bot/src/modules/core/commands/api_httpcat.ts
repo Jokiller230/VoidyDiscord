@@ -10,16 +10,21 @@ export default {
 			.setName("code")
 			.setDescription("The desirect HTTP status code.")
 			.setRequired(true)
+		)
+		.addBooleanOption(option => option
+			.setName("ephemeral")
+			.setDescription("Whether to publicly share the bot response")
 		),
 
 	execute: async (interaction, client) => {
 		const { options } = interaction;
 
 		const httpCode = options.getString("code");
+		const ephemeral = options.getBoolean("ephemeral") ?? true;
 
 		await interaction.reply({
 			files: [`https://http.cat/${httpCode}.jpg`],
-			flags: [MessageFlags.Ephemeral]
+			flags: ephemeral ? [MessageFlags.Ephemeral] : []
 		});
 	}
 } as Command
