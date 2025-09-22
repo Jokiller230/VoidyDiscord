@@ -1,6 +1,12 @@
+//===============================================
+//  Imports
+//===============================================
 import { Glob } from "bun";
 
-interface ILoader<T> {
+//===============================================
+//  Loader Definition
+//===============================================
+interface ILoader<T extends object> {
 	id: string
 	cache: T[]
 	source: string
@@ -10,10 +16,13 @@ interface ILoader<T> {
 	getJSON: () => T[]
 }
 
-export class Loader<T extends object> implements ILoader<T> {
-	public id = "loader";
+//===============================================
+//  Loader Implementation
+//===============================================
+export abstract class Loader<T extends object> implements ILoader<T> {
+	public abstract id: string;
 	public cache: T[] = [];
-	public source;
+	public source: string;
 
 	public constructor(source: string) {
 		if (!source) throw new Error("Class of type Loader was initialized without the *required* source parameter.");
@@ -57,9 +66,7 @@ export class Loader<T extends object> implements ILoader<T> {
 	/**
 		* Validates a singular element during data collection, and returns whatever should be written to the cache.
 	*/
-	public async validate(data: Partial<T>): Promise<T | null> {
-		return null;
-	}
+	public abstract validate(data: Partial<T>): Promise<T | null>;
 
 	/**
 		* Returns the JSON-ified contents of the loader cache

@@ -1,8 +1,8 @@
+import type { Event, VoidyClient } from "voidy-framework";
 import { ActivityType, Events } from "discord.js";
-import type { Event } from "../../../loaders/EventLoader";
-import type { VoidyClient } from "../../../core/VoidyClient";
 
 export default {
+	id: "ready",
 	name: Events.ClientReady,
 	once: true,
 	execute: async (client: VoidyClient) => {

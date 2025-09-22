@@ -1,20 +1,6 @@
 {
-	"name": "voidydiscord",
-	"version": "3.0.0-alpha1",
-	"module": "src/index.ts",
-	"type": "module",
-	"private": true,
-	"scripts": {
-		"dev": "bun --watch ."
-	},
-	"devDependencies": {
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5"
-	},
-	"dependencies": {
-		"ascii-table3": "^1.0.1",
-		"discord.js": "^14.21.0"
-	}
+	"name": "voidy",
+	"workspaces": [
+		"packages/*"
+	]
 }

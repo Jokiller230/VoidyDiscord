@@ -1,7 +1,8 @@
 import { MessageFlags, SlashCommandBuilder } from "discord.js";
-import type { Command } from "../../../loaders/CommandLoader";
+import type { Command } from "voidy-framework";
 
 export default {
+	id: "ping",
 	data: new SlashCommandBuilder()
 		.setName("ping")
 		.setDescription("View the websocket ping between Discord and the Bot."),

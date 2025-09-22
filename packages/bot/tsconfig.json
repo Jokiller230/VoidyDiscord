@@ -1,0 +1,14 @@
+{
+	"extends": "../../tsconfig.json",
+	"include": [
+		"src"
+	],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"voidy-framework": [
+				"../framework/src"
+			]
+		}
+	}
+}
