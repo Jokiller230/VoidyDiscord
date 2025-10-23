@@ -5,10 +5,10 @@ export default {
 	id: "api.httpcat",
 	data: new SlashCommandSubcommandBuilder()
 		.setName("httpcat")
-		.setDescription("Fetch a cat from the https://http.cat API.")
+		.setDescription("Display a cat from the https://http.cat API.")
 		.addStringOption(option => option
 			.setName("code")
-			.setDescription("The desirect HTTP status code.")
+			.setDescription("The desired HTTP status code.")
 			.setRequired(true)
 		)
 		.addBooleanOption(option => option
@@ -16,7 +16,7 @@ export default {
 			.setDescription("Whether to publicly share the bot response")
 		),
 
-	execute: async (interaction, client) => {
+	execute: async (interaction, _client) => {
 		const { options } = interaction;
 
 		const httpCode = options.getString("code");

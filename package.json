@@ -2,5 +2,8 @@
 	"name": "voidy",
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"scripts": {
+		"dev": "cd packages/bot && bun dev"
+	}
 }
